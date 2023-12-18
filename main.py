@@ -11,7 +11,7 @@ face_cascade = cv2.CascadeClassifier(os.path.join(script_dir, '/Users/amadoudiak
 
 def detect_faces(min_neighbors, scale_factor, rectangle_color):
     # Initialize the webcam
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(1)
 
     # Check if the camera is opened successfully
     if not cap.isOpened():
