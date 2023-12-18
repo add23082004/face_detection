@@ -3,15 +3,13 @@ import streamlit as st
 import time
 import os
 
-
 # Get the path to the script's directory
 script_dir = os.path.dirname(os.path.realpath(__file__))
 
 # Use the script's directory to load the cascade classifier
 face_cascade = cv2.CascadeClassifier(os.path.join(script_dir, '/Users/amadoudiakhadiop/Downloads/haarcascade_frontalface_default.xml'))
 
-
-def detect_faces():
+def detect_faces(min_neighbors, scale_factor, rectangle_color):
     # Initialize the webcam
     cap = cv2.VideoCapture(0)
 
@@ -36,14 +34,17 @@ def detect_faces():
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         # Detect the faces using the face cascade classifier
-        faces = face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
+        faces = face_cascade.detectMultiScale(gray, scaleFactor=scale_factor, minNeighbors=min_neighbors)
 
         # Draw rectangles around the detected faces
         for (x, y, w, h) in faces:
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            cv2.rectangle(frame, (x, y), (x + w, y + h), rectangle_color, 2)
+
+        # Convert BGR image to RGB
+        rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
         # Display the frames using Streamlit
-        st.image(frame, channels="BGR")  # Use channels="BGR" for color images
+        st.image(rgb_frame, channels="RGB", use_column_width=True)
 
         # Exit the loop when 'q' is pressed
         if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -53,18 +54,28 @@ def detect_faces():
     cap.release()
     cv2.destroyAllWindows()
 
-
 def app():
     st.title("Face Detection using Viola-Jones Algorithm")
     st.write("Press the button below to start detecting faces from your webcam")
+
     # Add a button to start detecting faces
     if st.button("Detect Faces"):
-        # Call the detect_faces function
-        detect_faces()
+        # Add instructions
+        st.write("Use 'q' to stop detecting faces.")
 
+        # Add sliders for minNeighbors and scaleFactor
+        min_neighbors = st.slider("minNeighbors", 1, 10, 5)
+        scale_factor = st.slider("scaleFactor", 1.1, 2.0, 1.3)
+
+        # Add color picker for rectangle color
+        rectangle_color = st.color_picker("Rectangle Color", "#00ff00")
+
+        # Call the detect_faces function with user-selected parameters
+        detect_faces(min_neighbors, scale_factor, rectangle_color)
 
 if __name__ == "__main__":
     app()
+
 
 
 
