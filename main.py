@@ -7,7 +7,7 @@ import os
 script_dir = os.path.dirname(os.path.realpath(__file__))
 
 # Use the script's directory to load the cascade classifier
-face_cascade = cv2.CascadeClassifier(os.path.join(script_dir, '/Users/amadoudiakhadiop/Downloads/haarcascade_frontalface_default.xml'))
+face_cascade = cv2.CascadeClassifier(os.path.join(script_dir, 'haarcascade_frontalface_default.xml'))
 
 def detect_faces(min_neighbors, scale_factor, rectangle_color):
     # Initialize the webcam
