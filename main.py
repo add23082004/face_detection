@@ -21,9 +21,13 @@ def detect_faces(min_neighbors, scale_factor, rectangle_color):
     # Wait for 2 seconds to allow the webcam to initialize
     time.sleep(2)
 
+    frame_count = 0
     while True:
         # Read the frames from the webcam
         ret, frame = cap.read()
+
+        frame_count += 1
+        st.write(f"Frames processed: {frame_count}")
 
         # Check if the frame was successfully captured
         if not ret:
@@ -64,11 +68,11 @@ def app():
         st.write("Use 'q' to stop detecting faces.")
 
         # Add sliders for minNeighbors and scaleFactor
-        min_neighbors = st.slider("minNeighbors", 1, 10, 5)
-        scale_factor = st.slider("scaleFactor", 1.1, 2.0, 1.3)
+        min_neighbors = st.slider("minNeighbors (Adjust to reduce false positives)", 1, 10, 5)
+        scale_factor = st.slider("scaleFactor (Adjust for sensitivity)", 1.1, 2.0, 1.3)
 
         # Add color picker for rectangle color
-        rectangle_color = st.color_picker("Rectangle Color", "#00ff00")
+        rectangle_color = st.color_picker("Rectangle Color (Pick the color for rectangles)", "#00ff00")
 
         # Call the detect_faces function with user-selected parameters
         detect_faces(min_neighbors, scale_factor, rectangle_color)
